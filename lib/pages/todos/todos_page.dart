@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:note_it/pages/notes/notes_edit_page.dart';
 import 'package:note_it/pages/todos/todos_add_page.dart';
 import 'package:note_it/widgets/empty_widget.dart';
 
