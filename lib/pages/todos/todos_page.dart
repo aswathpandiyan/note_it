@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:note_it/pages/todos/todos_add_page.dart';
+import 'package:note_it/pages/todos/todos_edit_page.dart';
 import 'package:note_it/widgets/empty_widget.dart';
 
 class TodosPage extends StatefulWidget {
@@ -48,12 +49,12 @@ class _TodosPageState extends State<TodosPage> {
                       clipBehavior: Clip.hardEdge,
                       child: InkWell(
                         onTap: () {
-                          // Navigator.push(context,
-                          //     MaterialPageRoute(builder: (context) {
-                          //   return NotesEditPage(
-                          //     id: todo.id,
-                          //   );
-                          // }));
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) {
+                            return TodosEditPage(
+                              id: todo.id,
+                            );
+                          }));
                         },
                         child: ListTile(
                           title: Text(
@@ -78,10 +79,8 @@ class _TodosPageState extends State<TodosPage> {
                                       child: ListTile(
                                         title: Text(todoItem.title),
                                         leading: todoItem.is_done
-                                            ? const Icon(
-                                                Icons.check_circle_outline)
-                                            : const Icon(
-                                                Icons.check_circle_rounded),
+                                            ? const Icon(Icons.check_circle)
+                                            : const Icon(Icons.circle_outlined),
                                       ),
                                     );
                                   }

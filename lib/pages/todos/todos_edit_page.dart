@@ -1,27 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:nanoid2/nanoid2.dart';
 import 'package:note_it/models/todoitem.dart';
-import 'package:note_it/models/todos.dart';
 
-class TodosAddPage extends StatefulWidget {
-  const TodosAddPage({super.key});
+// ignore: must_be_immutable
+class TodosEditPage extends StatefulWidget {
+  late String id;
+  TodosEditPage({super.key, required this.id});
 
   @override
-  State<TodosAddPage> createState() => _TodosAddPageState();
+  State<TodosEditPage> createState() => _TodosEditPageState();
 }
 
-class _TodosAddPageState extends State<TodosAddPage> {
+class _TodosEditPageState extends State<TodosEditPage> {
   late final Box todosBox;
-  final List<TodoItem> todoItemList = [];
-  final titleCtrl = TextEditingController(text: "");
-  final todoItemCtrl = TextEditingController(text: "");
+  late List<TodoItem> todoItemList;
+  late TextEditingController titleCtrl;
+  late TextEditingController todoItemCtrl;
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
     todosBox = Hive.box('todos_box');
+    var todo = todosBox.get(widget.id);
+    titleCtrl = TextEditingController(text: todo.title);
+    todoItemCtrl = TextEditingController(text: "");
+    todoItemList = todo.todo_items;
   }
 
   @override
@@ -31,17 +35,12 @@ class _TodosAddPageState extends State<TodosAddPage> {
     super.dispose();
   }
 
-  void _createTodo() async {
-    Todos newTodo = Todos(
-        id: nanoid(),
-        title: titleCtrl.text,
-        todo_items: todoItemList,
-        tag: null,
-        is_archived: false,
-        created_at: DateTime.now(),
-        updated_at: DateTime.now());
-
-    todosBox.put(newTodo.id, newTodo);
+  void _updateTodo() {
+    var todo = todosBox.get(widget.id);
+    todo.title = titleCtrl.text;
+    todo.todo_items = todoItemList;
+    todo.updated_at = DateTime.now();
+    todo.save();
   }
 
   void _onTodoAdd(String value) {
@@ -72,7 +71,15 @@ class _TodosAddPageState extends State<TodosAddPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Add todos"),
+        title: const Text("Edit todo"),
+        actions: [
+          IconButton(
+              onPressed: () {
+                todosBox.delete(widget.id);
+                Navigator.pop(context);
+              },
+              icon: const Icon(Icons.delete)),
+        ],
       ),
       body: Form(
         key: _formKey,
@@ -139,9 +146,9 @@ class _TodosAddPageState extends State<TodosAddPage> {
                             },
                             child: ListTile(
                               title: Text(todoItem.title),
-                              leading: todoItem.is_done
-                                  ? const Icon(Icons.check_circle_outline)
-                                  : const Icon(Icons.check_circle_rounded),
+                              leading: (todoItem.is_done == true)
+                                  ? const Icon(Icons.check_circle)
+                                  : const Icon(Icons.circle_outlined),
                               trailing: IconButton(
                                   onPressed: () {
                                     _onDeleteTodoItem(index);
@@ -170,7 +177,8 @@ class _TodosAddPageState extends State<TodosAddPage> {
               ),
             );
           } else {
-            _createTodo();
+            _updateTodo();
+            // _createTodo();
             // context.go('/');
           }
           Navigator.pop(context, 'done');
