@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:note_it/pages/events/events_page.dart';
 import 'package:note_it/pages/notes/notes_page.dart';
+import 'package:note_it/pages/settings/settings_page.dart';
 import 'package:note_it/pages/todos/todos_page.dart';
 
 class RootPage extends StatefulWidget {
@@ -15,10 +17,8 @@ class _RootPageState extends State<RootPage> {
   static const List<Widget> _widgetOptions = <Widget>[
     NotesPage(),
     TodosPage(),
-    Text('Events Page',
-        style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
-    Text('Settings Page',
-        style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
+    EventsPage(),
+    SettingsPage(),
   ];
 
   void _onItemTapped(int index) {
@@ -31,7 +31,7 @@ class _RootPageState extends State<RootPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: NavigationBar(
-        animationDuration: const Duration(milliseconds: 2000),
+        animationDuration: const Duration(milliseconds: 1000),
         destinations: const <Widget>[
           NavigationDestination(
             icon: Icon(Icons.notes),

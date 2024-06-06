@@ -1,6 +1,7 @@
 import 'package:easy_dynamic_theme/easy_dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:note_it/models/events.dart';
 import 'package:note_it/models/notes.dart';
 import 'package:note_it/models/todoitem.dart';
 import 'package:note_it/models/todos.dart';
@@ -28,8 +29,10 @@ void main() async {
   Hive.registerAdapter(NotesAdapter());
   Hive.registerAdapter(TodosAdapter());
   Hive.registerAdapter(TodoItemAdapter());
+  Hive.registerAdapter(EventsAdapter());
   await Hive.openBox('notes_box');
   await Hive.openBox('todos_box');
+  await Hive.openBox('events_box');
   runApp(
     EasyDynamicThemeWidget(
       child: const MyApp(),

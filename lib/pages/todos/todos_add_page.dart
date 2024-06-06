@@ -140,8 +140,8 @@ class _TodosAddPageState extends State<TodosAddPage> {
                             child: ListTile(
                               title: Text(todoItem.title),
                               leading: todoItem.is_done
-                                  ? const Icon(Icons.check_circle_outline)
-                                  : const Icon(Icons.check_circle_rounded),
+                                  ? const Icon(Icons.check_circle)
+                                  : const Icon(Icons.circle_outlined),
                               trailing: IconButton(
                                   onPressed: () {
                                     _onDeleteTodoItem(index);
